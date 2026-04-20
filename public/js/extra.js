@@ -558,9 +558,16 @@ export function postProcess (code) {
     $(value).html(html)
   })
   // link should open in new window or tab
+  // Turbulentarius comment: Umm no? That is super annoying and non-standard,
+  //     and frawned upon by accessibility experts.
+  //     If the user wants to open a link in a new tab, they can do so themselves
+  //     with ctrl/cmd+click or right-click->open in new tab.
+  //     Forcing it on all links is bad UX and can cause confusion.
+  //     noopener is also the default behavior for links with target="_blank" in modern browsers, so it is not needed to add it explicitly.
+
   // also add noopener to prevent clickjacking
   // See details: https://mathiasbynens.github.io/rel-noopener/
-  result.find('a:not([href^="#"]):not([target])').attr('target', '_blank').attr('rel', 'noopener')
+  // result.find('a:not([href^="#"]):not([target])').attr('target', '_blank').attr('rel', 'noopener')
 
   // If it's hashtag link then make it base uri independent
   result.find('a[href^="#"]').each((index, linkTag) => {
