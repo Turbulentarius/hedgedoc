@@ -141,8 +141,8 @@ iframe.github-gist-frame {
     margin-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
-    max-width: 45vw;
-    width: 25vw;
+    max-width: 90vw;
+    width: 75vw;
     max-height: 70vh;
     overflow: auto;
     text-align: inherit;
@@ -166,7 +166,7 @@ iframe.github-gist-frame {
 
 .ui-toc-dropdown .nav>li>a {
     display: block;
-    padding: 4px 20px;
+    padding: 4px 0.3rem;
     font-size: 13px;
     font-weight: 500;
     color: #767676;
@@ -181,7 +181,7 @@ iframe.github-gist-frame {
 }
 
 .ui-toc-dropdown .nav>li>a:focus,.ui-toc-dropdown .nav>li>a:hover {
-    padding-left: 19px;
+    padding-left: 0.3rem;
     color: black;
     text-decoration: none;
     background-color: transparent;
@@ -194,13 +194,13 @@ iframe.github-gist-frame {
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav>li>a:focus,.ui-toc-dropdown[dir='rtl'] .nav>li>a:hover {
-    padding-right: 19px;
+    padding-right: 0.3rem;
     border-left: none;
     border-right: 1px solid black;
 }
 
 .ui-toc-dropdown .nav>.active:focus>a,.ui-toc-dropdown .nav>.active:hover>a,.ui-toc-dropdown .nav>.active>a {
-    padding-left: 18px;
+    padding-left: 0.6rem;
     font-weight: 700;
     color: black;
     background-color: transparent;
@@ -229,7 +229,7 @@ iframe.github-gist-frame {
 .ui-toc-dropdown .nav .nav>li>a {
     padding-top: 1px;
     padding-bottom: 1px;
-    padding-left: 30px;
+    padding-left: 0.3rem;
     font-size: 12px;
     font-weight: 400;
 }
@@ -239,53 +239,53 @@ iframe.github-gist-frame {
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>li>a {
-    padding-right: 30px;
+    padding-right: 0.3rem;
 }
 
 .ui-toc-dropdown .nav .nav>li>ul>li>a {
     padding-top: 1px;
     padding-bottom: 1px;
-    padding-left: 40px;
+    padding-left: 0.3rem;
     font-size: 12px;
     font-weight: 400;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>li>ul>li>a {
-    padding-right: 40px;
+    padding-right: 0.3rem;
 }
 
 .ui-toc-dropdown .nav .nav>li>a:focus,.ui-toc-dropdown .nav .nav>li>a:hover {
-    padding-left: 29px;
+    padding-right: 0.28rem;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>li>a:focus,.ui-toc-dropdown[dir='rtl'] .nav .nav>li>a:hover {
-    padding-right: 29px;
+    padding-right: 0.28rem;
 }
 
 .ui-toc-dropdown .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>a:hover {
-    padding-left: 39px;
+    padding-left: 0.3rem;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown[dir='rtl'] .nav .nav>li>ul>li>a:hover {
-    padding-right: 39px;
+    padding-right: 0.3rem;
 }
 
 .ui-toc-dropdown .nav .nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>a {
-    padding-left: 28px;
+    padding-left: 0.25rem;
     font-weight: 500;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>.active:focus>a,.ui-toc-dropdown[dir='rtl'] .nav .nav>.active:hover>a,.ui-toc-dropdown[dir='rtl'] .nav .nav>.active>a {
-    padding-right: 28px;
+    padding-right: 0.25rem;
 }
 
 .ui-toc-dropdown .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>a {
-    padding-left: 38px;
+    padding-left: 0.3rem;
     font-weight: 500;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir='rtl'] .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown[dir='rtl'] .nav .nav>.active>.nav>.active>a {
-    padding-right: 38px;
+    padding-right: 0.3rem;
 }
 
 /* support japanese font */
