@@ -34,6 +34,11 @@ whiteList.rt = []
 whiteList.figure = []
 // allow figcaption tag
 whiteList.figcaption = []
+// allow video tag with some safe attributes
+whiteList.video = ['autoplay', 'controls', 'loop', 'muted', 'poster', 'preload', 'src', 'width', 'height', 'playsinline']
+// allow nested media sources and captions inside video
+whiteList.source = ['src', 'type', 'media', 'sizes']
+whiteList.track = ['default', 'kind', 'label', 'src', 'srclang']
 
 const filterXSSOptions = {
   allowCommentTag: true,
