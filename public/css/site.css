@@ -85,3 +85,8 @@ div.toc li ul li::before {
     width: 4ch;
     text-align: right;
 }
+
+
+#ui-toc-affix li a {
+  padding-left: 0.3rem;
+}
