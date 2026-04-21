@@ -61,8 +61,8 @@ div.toc li {
 div.toc li::before {
     content: counters(item, ".") ".";
     position: absolute;
-    left: -1.05rem;
-    top: 0.3rem;
+    left: -1.7rem;
+    top: 0.4rem;
     color: rgba(0, 0, 0, 0.55);
     font-size: 0.92rem;
     width: 3ch;
@@ -75,18 +75,22 @@ div.toc li ul li {
     padding-left: 1.5rem !important;
 }
 
+div.ui-view-area div.toc li ul li {
+    padding-left: 1.7rem !important;
+}
+
 div.toc li ul li::before {
     content: counters(item, ".") "." counters(subitem, ".") "";
     position: absolute;
-    left: -1.05rem;
-    top: 0.3rem;
+    left: -1.7rem;
+    top: 0.4rem;
     color: rgba(0, 0, 0, 0.55);
-    font-size: 0.88rem;
+    /* font-size: 0.88rem; */
     width: 4ch;
     text-align: right;
 }
 
 
 #ui-toc-affix li a {
-  padding-left: 0.3rem;
+  padding-left: 0.4rem;
 }

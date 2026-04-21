@@ -141,8 +141,7 @@ iframe.github-gist-frame {
     margin-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
-    max-width: 90vw;
-    width: 75vw;
+    width: 85vw;
     max-height: 70vh;
     overflow: auto;
     text-align: inherit;
@@ -181,7 +180,7 @@ iframe.github-gist-frame {
 }
 
 .ui-toc-dropdown .nav>li>a:focus,.ui-toc-dropdown .nav>li>a:hover {
-    padding-left: 0.3rem;
+    padding-left: 0.4rem;
     color: black;
     text-decoration: none;
     background-color: transparent;
@@ -194,13 +193,13 @@ iframe.github-gist-frame {
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav>li>a:focus,.ui-toc-dropdown[dir='rtl'] .nav>li>a:hover {
-    padding-right: 0.3rem;
+    padding-right: 0.5rem;
     border-left: none;
     border-right: 1px solid black;
 }
 
 .ui-toc-dropdown .nav>.active:focus>a,.ui-toc-dropdown .nav>.active:hover>a,.ui-toc-dropdown .nav>.active>a {
-    padding-left: 0.6rem;
+    padding-left: 0.7rem;
     font-weight: 700;
     color: black;
     background-color: transparent;
@@ -229,7 +228,7 @@ iframe.github-gist-frame {
 .ui-toc-dropdown .nav .nav>li>a {
     padding-top: 1px;
     padding-bottom: 1px;
-    padding-left: 0.3rem;
+    padding-left: 0.5rem;
     font-size: 12px;
     font-weight: 400;
 }
@@ -239,53 +238,53 @@ iframe.github-gist-frame {
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>li>a {
-    padding-right: 0.3rem;
+    padding-right: 0.5rem;
 }
 
 .ui-toc-dropdown .nav .nav>li>ul>li>a {
     padding-top: 1px;
     padding-bottom: 1px;
-    padding-left: 0.3rem;
+    padding-left: 0.5rem;
     font-size: 12px;
     font-weight: 400;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>li>ul>li>a {
-    padding-right: 0.3rem;
+    padding-right: 0.4rem;
 }
 
 .ui-toc-dropdown .nav .nav>li>a:focus,.ui-toc-dropdown .nav .nav>li>a:hover {
-    padding-right: 0.28rem;
+    padding-right: 0.4rem;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>li>a:focus,.ui-toc-dropdown[dir='rtl'] .nav .nav>li>a:hover {
-    padding-right: 0.28rem;
+    padding-right: 0.4rem;
 }
 
 .ui-toc-dropdown .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>a:hover {
-    padding-left: 0.3rem;
+    padding-left: 0.4rem;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown[dir='rtl'] .nav .nav>li>ul>li>a:hover {
-    padding-right: 0.3rem;
+    padding-right: 0.5rem;
 }
 
 .ui-toc-dropdown .nav .nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>a {
-    padding-left: 0.25rem;
+    padding-left: 0.4rem;
     font-weight: 500;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>.active:focus>a,.ui-toc-dropdown[dir='rtl'] .nav .nav>.active:hover>a,.ui-toc-dropdown[dir='rtl'] .nav .nav>.active>a {
-    padding-right: 0.25rem;
+    padding-right: 0.4rem;
 }
 
 .ui-toc-dropdown .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>a {
-    padding-left: 0.3rem;
+    padding-left: 0.5rem;
     font-weight: 500;
 }
 
 .ui-toc-dropdown[dir='rtl'] .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir='rtl'] .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown[dir='rtl'] .nav .nav>.active>.nav>.active>a {
-    padding-right: 0.3rem;
+    padding-right: 0.5rem;
 }
 
 /* support japanese font */
