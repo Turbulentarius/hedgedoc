@@ -1203,6 +1203,7 @@ if (DROPBOX_APP_KEY) {
 // button actions
 // share
 ui.toolbar.publish.attr('href', noteurl + '/publish')
+$('.ui-public-view').attr('href', '/profundarium/' + encodeURIComponent(noteid))
 // extra
 // slide
 ui.toolbar.extra.slide.attr('href', noteurl + '/slide')
