@@ -85,11 +85,14 @@ if (config.enableStatsApi) {
 const io = new Server(server, {
   pingInterval: config.heartbeatInterval,
   pingTimeout: config.heartbeatTimeout,
-  cookie: false,
   cors: {
     origin: config.serverURL,
     methods: ['GET', 'POST'],
     credentials: true
+  },
+  connectionStateRecovery: {
+    maxDisconnectionDuration: 2 * 60 * 1000,
+    skipMiddlewares: false
   }
 })
 
@@ -253,6 +256,15 @@ app.locals.authProviders = {
   allowEmailRegister: config.allowEmailRegister
 }
 
+// If none of the form-based methods (LDAP, Email, OpenID) are configured and
+// exactly one redirect-style external provider is, skip the "Choose method"
+// dialog and link "Sign In" straight to that provider's login page.
+const externalProviderKeys = ['facebook', 'twitter', 'github', 'gitlab', 'mattermost', 'dropbox', 'google', 'saml', 'oauth2']
+const enabledExternalProviders = externalProviderKeys.filter((key) => app.locals.authProviders[key])
+app.locals.authProviders.autoLoginProvider = (!app.locals.authProviders.ldap && !app.locals.authProviders.email && !app.locals.authProviders.openID && enabledExternalProviders.length === 1)
+  ? enabledExternalProviders[0]
+  : null
+
 // Export/Import menu items
 app.locals.enableDropBoxSave = config.isDropboxEnable
 app.locals.enableGitHubGist = config.isGitHubEnable
@@ -262,8 +274,8 @@ app.use(require('./lib/web/baseRouter'))
 app.use(require('./lib/web/statusRouter'))
 app.use(require('./lib/web/auth'))
 app.use(require('./lib/web/historyRouter'))
-app.use(require('./lib/web/userRouter'))
-app.use(require('./lib/web/imageRouter'))
+app.use(require('./lib/web/userRouter').default)
+app.use(require('./lib/web/imageRouter').default)
 app.use(require('./lib/web/note/router'))
 
 // response not found if no any route matxches

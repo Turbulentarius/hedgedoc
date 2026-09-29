@@ -10,6 +10,7 @@ import {
   parseMeta,
   postProcess,
   renderTOC,
+  rewriteExternalLinks,
   scrollToHash,
   smoothHashScroll,
   updateLastChange
@@ -21,7 +22,8 @@ require('../css/extra.css')
 require('../css/slide-preview.css')
 require('../css/site.css')
 
-require('highlight.js/styles/github-gist.css')
+require('highlight.js/styles/github.css')
+require('../css/highlightjs.css')
 
 const markdown = $('#doc.markdown-body')
 const text = markdown.text()
@@ -54,6 +56,7 @@ if (md.meta.type && md.meta.type === 'slide') {
   rendered = preventXSS(rendered)
   const result = postProcess(rendered)
   markdown.html(result.html())
+  rewriteExternalLinks(markdown)
 }
 $(document.body).show()
 

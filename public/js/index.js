@@ -18,7 +18,6 @@ import hex2rgb from '../vendor/ot/hex2rgb'
 import { saveAs } from 'file-saver'
 import chance from 'chance'
 import store from 'store'
-import url from 'wurl'
 import { Spinner } from 'spin.js'
 
 import _ from 'lodash'
@@ -55,6 +54,7 @@ import {
   renderTOC,
   renderTags,
   renderTitle,
+  rewriteExternalLinks,
   scrollToHash,
   smoothHashScroll,
   updateLastChange,
@@ -92,7 +92,8 @@ require('../css/extra.css')
 require('../css/slide-preview.css')
 require('../css/site.css')
 
-require('highlight.js/styles/github-gist.css')
+require('highlight.js/styles/github.css')
+require('../css/highlightjs.css')
 require('./fix-aria-hidden-for-modals')
 
 let defaultTextHeight = 20
@@ -584,6 +585,16 @@ function setRefreshModal (status) {
   $('#refreshModal')
     .find('.' + status)
     .show()
+}
+
+function setOutOfSyncModal (markdown) {
+  const outOfSyncModal = $('#outOfSyncModal')
+  outOfSyncModal.removeData('bs.modal')
+    .modal({
+      backdrop: 'static',
+      keyboard: false
+    })
+  outOfSyncModal.find('textarea#outOfSyncTextarea').text(markdown)
 }
 
 function setNeedRefresh () {
@@ -1780,6 +1791,28 @@ $('#refreshModalRefresh').click(function () {
   location.reload(true)
 })
 
+$('#outOfSyncModalReload').click(function () {
+  location.reload(true)
+})
+
+if (!('clipboard' in navigator)) {
+  $('#outOfSyncModalCopy').prop('disabled', true)
+}
+
+$('#outOfSyncModalCopy').tooltip({
+  trigger: 'manual'
+}).click(function () {
+  const markdownContent = $('#outOfSyncTextarea').text()
+  navigator.clipboard.writeText(markdownContent).then(() => {
+    $('#outOfSyncModalCopy').tooltip('show')
+    setTimeout(function () {
+      $('#outOfSyncModalCopy').tooltip('hide')
+    }, 2000)
+  }).catch((copyError) => {
+    console.error('Error copying content to clipboard', copyError)
+  })
+})
+
 // gist import modal
 $('#gistImportModalClear').click(function () {
   $('#gistImportModalContent').val('')
@@ -1798,7 +1831,7 @@ $('#gistImportModalConfirm').click(function () {
       false
     )
   } else {
-    const hostname = url('hostname', gisturl)
+    const hostname = new URL(gisturl).hostname
     if (hostname !== 'gist.github.com') {
       showMessageModal(
         '<i class="fa fa-github"></i> Import from Gist',
@@ -1809,7 +1842,8 @@ $('#gistImportModalConfirm').click(function () {
       )
     } else {
       ui.spinner.show()
-      $.get('https://api.github.com/gists/' + url('-1', gisturl))
+      const gistId = new URL(gisturl).pathname.split('/').pop()
+      $.get('https://api.github.com/gists/' + gistId)
         .done(function (data) {
           if (data.files) {
             let contents = ''
@@ -2233,7 +2267,6 @@ socket.on('delete', function () {
     })
   }
 })
-let retryTimer = null
 socket.on('maintenance', function () {
   cmClient.revision = -1
 })
@@ -2246,21 +2279,26 @@ socket.on('disconnect', function (data) {
   if (!editor.getOption('readOnly')) {
     editor.setOption('readOnly', true)
   }
-  if (!retryTimer) {
-    retryTimer = setInterval(function () {
-      if (!needRefresh) socket.connect()
-    }, 1000)
-  }
-})
-socket.on('reconnect', function (data) {
-  // sync back any change in offline
-  emitUserStatus(true)
-  cursorActivity(editor)
-  socket.emit('online users')
 })
 socket.on('connect', function (data) {
-  clearInterval(retryTimer)
-  retryTimer = null
+  if (socket.recovered) {
+    console.debug('Reconnected client')
+    if (cmClient.state.name !== 'Synchronized') {
+      // We can't guarantee a working sync here.
+      // So we check if the user did any changes while they were offline, if so we tell them to copy
+      // everything into a different window and reload the editor.
+      const markdownContent = cmClient.editorAdapter.getValue()
+      console.debug('Can\'t restablish sync')
+      console.debug('Please save the following content.\n', markdownContent)
+      setOutOfSyncModal(markdownContent)
+      return
+    }
+    emitUserStatus(true)
+    cursorActivity(editor)
+    socket.emit('online users')
+    return
+  }
+  console.debug('Client connected (no reconnect)')
   personalInfo.id = socket.id
   showStatus(statusType.connected)
   socket.emit('version')
@@ -3499,6 +3537,7 @@ function updateViewInner () {
   }
   removeDOMEvents(ui.area.markdown)
   finishView(ui.area.markdown)
+  rewriteExternalLinks(ui.area.markdown)
   autoLinkify(ui.area.markdown)
   deduplicatedHeaderId(ui.area.markdown)
   renderTOC(ui.area.markdown)

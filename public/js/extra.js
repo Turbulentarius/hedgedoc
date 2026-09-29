@@ -11,9 +11,17 @@ import { escapeHtml, unescapeHtml } from './utils'
 
 import markdownit from 'markdown-it'
 import markdownitContainer from 'markdown-it-container'
-
-/* Defined regex markdown it plugins */
-import Plugin from 'markdown-it-regexp'
+import MarkdownItRegexpPlugin from 'markdown-it-regexp'
+import MarkdownItAbbrPlugin from 'markdown-it-abbr'
+import MarkdownItFootnotePlugin from 'markdown-it-footnote'
+import MarkdownItDeflistPlugin from 'markdown-it-deflist'
+import MarkdownItMarkPlugin from 'markdown-it-mark'
+import MarkdownItInsPlugin from 'markdown-it-ins'
+import MarkdownItSubPlugin from 'markdown-it-sub'
+import MarkdownItSupPlugin from 'markdown-it-sup'
+import MarkdownItMathjaxPlugin from 'markdown-it-mathjax'
+import { full as MarkdownItEmojiPlugin } from 'markdown-it-emoji'
+import MarkdownItImsizePlugin from 'markdown-it-imsize'
 
 require('prismjs/themes/prism.css')
 require('prismjs/components/prism-wiki')
@@ -517,7 +525,9 @@ export function finishView (view) {
             if (!languages.includes(reallang)) {
               result = hljs.highlightAuto(code)
             } else {
-              result = hljs.highlight(reallang, code)
+              result = hljs.highlight(code, {
+                language: reallang
+              })
             }
             if (codeDiv.length > 0) codeDiv.html(result.value)
             else langDiv.html(result.value)
@@ -557,25 +567,14 @@ export function postProcess (code) {
     html = html.replace(/@import url\(([^)]*)\);?/gi, '')
     $(value).html(html)
   })
-  // link should open in new window or tab
-  // Turbulentarius comment: Umm no? That is super annoying and non-standard,
-  //     and frawned upon by accessibility experts.
-  //     If the user wants to open a link in a new tab, they can do so themselves
-  //     with ctrl/cmd+click or right-click->open in new tab.
-  //     Forcing it on all links is bad UX and can cause confusion.
-  //     noopener is also the default behavior for links with target="_blank" in modern browsers, so it is not needed to add it explicitly.
-
-  // also add noopener to prevent clickjacking
-  // See details: https://mathiasbynens.github.io/rel-noopener/
-  // result.find('a:not([href^="#"]):not([target])').attr('target', '_blank').attr('rel', 'noopener')
 
   // If it's hashtag link then make it base uri independent
   result.find('a[href^="#"]').each((index, linkTag) => {
     const currentLocation = new URL(window.location)
     currentLocation.hash = linkTag.hash
     linkTag.href = currentLocation.toString()
+    linkTag.target = '_self'
   })
-
   // update continue line numbers
   const linenumberdivs = result.find('.gutter.linenumber').toArray()
   for (let i = 0; i < linenumberdivs.length; i++) {
@@ -599,6 +598,47 @@ export function postProcess (code) {
   return result
 }
 window.postProcess = postProcess
+
+// rewrite external links to go through the /_link warning page
+export function rewriteExternalLinks (view) {
+  if (window.externalLinkWarning === false) {
+    return
+  }
+  const whitelist = window.externalLinkWhitelist || []
+  view.find('a[href]').each((index, linkTag) => {
+    const anchor = $(linkTag)
+    const href = anchor.attr('href')
+    if (!href || href.startsWith('#')) {
+      return
+    }
+    let parsed
+    try {
+      parsed = new URL(href)
+    } catch (err) {
+      return
+    }
+    // only rewrite links that have an absolute http(s) URL
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return
+    }
+    // skip rewriting for same origin and whitelisted domains while differentiating between wildcard entries and plain host entries
+    const hostname = parsed.hostname.toLowerCase()
+    if (parsed.origin === window.location.origin || whitelist.some(domain => {
+      const lowercaseDomain = domain.toLowerCase()
+      if (lowercaseDomain.startsWith('*.')) {
+        return hostname.endsWith('.' + lowercaseDomain.slice(2))
+      }
+      return hostname === lowercaseDomain
+    })) {
+      return
+    }
+    const urlPath = window.urlpath ? `/${window.urlpath}` : ''
+    const warningURL = `${window.location.origin}${urlPath}/_link?url=${encodeURIComponent(parsed.href)}`
+    anchor.attr('href', warningURL)
+    // Preserve normal navigation and modifier-click behavior.
+  })
+}
+window.rewriteExternalLinks = rewriteExternalLinks
 
 const domevents = Object.getOwnPropertyNames(document).concat(Object.getOwnPropertyNames(Object.getPrototypeOf(Object.getPrototypeOf(document)))).concat(Object.getOwnPropertyNames(Object.getPrototypeOf(window))).filter(function (i) {
   return !i.indexOf('on') && (document[i] === null || typeof document[i] === 'function')
@@ -1021,14 +1061,14 @@ export const md = markdownit('default', {
 })
 window.md = md
 
-md.use(require('markdown-it-abbr'))
-md.use(require('markdown-it-footnote'))
-md.use(require('markdown-it-deflist'))
-md.use(require('markdown-it-mark'))
-md.use(require('markdown-it-ins'))
-md.use(require('markdown-it-sub'))
-md.use(require('markdown-it-sup'))
-md.use(require('markdown-it-mathjax')({
+md.use(MarkdownItAbbrPlugin)
+md.use(MarkdownItFootnotePlugin)
+md.use(MarkdownItDeflistPlugin)
+md.use(MarkdownItMarkPlugin)
+md.use(MarkdownItInsPlugin)
+md.use(MarkdownItSubPlugin)
+md.use(MarkdownItSupPlugin)
+md.use(MarkdownItMathjaxPlugin({
   beforeMath: '<span class="mathjax raw">',
   afterMath: '</span>',
   beforeInlineMath: '<span class="mathjax raw">\\(',
@@ -1036,9 +1076,9 @@ md.use(require('markdown-it-mathjax')({
   beforeDisplayMath: '<span class="mathjax raw">\\[',
   afterDisplayMath: '\\]</span>'
 }))
-md.use(require('markdown-it-imsize'))
+md.use(MarkdownItImsizePlugin)
 
-md.use(require('markdown-it-emoji'), {
+md.use(MarkdownItEmojiPlugin, {
   shortcuts: {}
 })
 
@@ -1109,7 +1149,7 @@ md.renderer.rules.fence = (tokens, idx, options, env, self) => {
 }
 
 // youtube
-const youtubePlugin = new Plugin(
+const youtubePlugin = new MarkdownItRegexpPlugin(
   // regexp to match
   /{%youtube\s*([\w-]{11})\s*%}/,
 
@@ -1127,7 +1167,7 @@ const youtubePlugin = new Plugin(
   }
 )
 // vimeo
-const vimeoPlugin = new Plugin(
+const vimeoPlugin = new MarkdownItRegexpPlugin(
   // regexp to match
   /{%vimeo\s*(\d{6,11})\s*%}/,
 
@@ -1142,7 +1182,7 @@ const vimeoPlugin = new Plugin(
   }
 )
 // gist
-const gistPlugin = new Plugin(
+const gistPlugin = new MarkdownItRegexpPlugin(
   // regexp to match
   /{%gist\s*(\w+\/\w+)\s*%}/,
 
@@ -1152,14 +1192,14 @@ const gistPlugin = new Plugin(
   }
 )
 // TOC
-const tocPlugin = new Plugin(
+const tocPlugin = new MarkdownItRegexpPlugin(
   // regexp to match
   /^\[TOC\]$/i,
 
   (match, utils) => '<div class="toc"></div>'
 )
 // slideshare
-const slidesharePlugin = new Plugin(
+const slidesharePlugin = new MarkdownItRegexpPlugin(
   // regexp to match
   /{%slideshare\s*(\w+\/[\w-]+)\s*%}/,
 
@@ -1171,7 +1211,7 @@ const slidesharePlugin = new Plugin(
   }
 )
 // speakerdeck
-const speakerdeckPlugin = new Plugin(
+const speakerdeckPlugin = new MarkdownItRegexpPlugin(
   // regexp to match
   /{%speakerdeck\s*(\w+\/[\w-]+)\s*%}/,
 
@@ -1183,7 +1223,7 @@ const speakerdeckPlugin = new Plugin(
   }
 )
 // pdf
-const pdfPlugin = new Plugin(
+const pdfPlugin = new MarkdownItRegexpPlugin(
   // regexp to match
   /{%pdf\s*([\d\D]*?)\s*%}/,
 
@@ -1196,7 +1236,7 @@ const pdfPlugin = new Plugin(
   }
 )
 
-const emojijsPlugin = new Plugin(
+const emojijsPlugin = new MarkdownItRegexpPlugin(
   // regexp to match emoji shortcodes :something:
   // We generate an universal regex that guaranteed only contains the
   // emojies we have available. This should prevent all false-positives
@@ -1233,7 +1273,11 @@ function meta (state, start, end, silent) {
   if (line >= end) return false
 
   try {
-    md.meta = window.jsyaml.safeLoad(data.join('\n')) || {}
+    const parsed = window.jsyaml.load(data.join('\n')) || {}
+    md.meta = window.ConstrainObject.constrainObject(parsed, {
+      onCycle: 'omit',
+      maxDepth: 4
+    })
     delete md.metaError
   } catch (err) {
     md.metaError = err

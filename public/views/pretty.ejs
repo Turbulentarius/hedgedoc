@@ -15,9 +15,9 @@
     <meta name="description" content="<%= description %>">
     <% } %>
     <% for (var og in opengraph) { %>
-    <% if (opengraph.hasOwnProperty(og) && opengraph[og].trim() !== '') { %>
+    <% if (Object.keys(opengraph).includes(og) && typeof opengraph[og] === 'string' && opengraph[og].trim() !== '') { %>
     <meta property="og:<%= og %>" content="<%= opengraph[og] %>">
-    <% }} if (!opengraph.hasOwnProperty('image')) { %>
+    <% }} if (!Object.keys(opengraph).includes('image')) { %>
     <meta property="og:image" content="<%- serverURL %>/icons/android-chrome-512x512.png">
     <meta property="og:image:alt" content="HedgeDoc logo">
     <meta property="og:image:type" content="image/png">
@@ -34,7 +34,7 @@
         <small>
             <span>
                 <% if(lastchangeuserprofile) { %>
-                    <span class="ui-lastchangeuser">&thinsp;<i class="ui-user-icon small" style="background-image: url(<%- lastchangeuserprofile.photo %>);" data-toggle="tooltip" data-placement="right" title="<%- lastchangeuserprofile.name %>"></i></span>
+                    <span class="ui-lastchangeuser">&thinsp;<i class="ui-user-icon small" style="background-image: url(<%- lastchangeuserprofile.photo %>);" data-toggle="tooltip" data-placement="right" title="<%= lastchangeuserprofile.name %>"></i></span>
                 <% } else { %>
                   <span class="ui-no-lastchangeuser">&thinsp;<i class="fa fa-clock-o fa-fw" style="width: 18px;"></i></span>
                 <% } %>
@@ -45,7 +45,7 @@
             <br>
             <% if(ownerprofile && owner !== lastchangeuser) { %>
             <span class="ui-owner">
-                &thinsp;<i class="ui-user-icon small" style="background-image: url(<%- ownerprofile.photo %>);" data-toggle="tooltip" data-placement="right" title="<%- ownerprofile.name %>"></i>
+                &thinsp;<i class="ui-user-icon small" style="background-image: url(<%- ownerprofile.photo %>);" data-toggle="tooltip" data-placement="right" title="<%= ownerprofile.name %>"></i>
                 &nbsp;<span class="text-uppercase">owned this note</span>
             </span>
             <% } %>

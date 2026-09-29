@@ -12,13 +12,14 @@ We currently support the `amd64` and `arm64` architectures.
 The easiest way to get started with HedgeDoc and Docker is to use the following `docker-compose.yml`:
 
 !!! warning
-    This is a minimal example to get started quickly and not intended for production use.
+    This is a minimal example to get started quickly and not intended for production use.  
+    For more information about production use see [this guide](../guides/production-ready.md).
 
 ```yaml
 version: '3'
 services:
   database:
-    image: postgres:17.7-alpine
+    image: postgres:18.6-alpine
     environment:
       - POSTGRES_USER=hedgedoc
       - POSTGRES_PASSWORD=password
@@ -28,7 +29,7 @@ services:
     restart: always
   app:
     # Make sure to use the latest release from https://hedgedoc.org/latest-release
-    image: quay.io/hedgedoc/hedgedoc:1.10.8
+    image: quay.io/hedgedoc/hedgedoc:1.12.0
     environment:
       - CMD_DB_URL=postgres://hedgedoc:password@database:5432/hedgedoc
       - CMD_DOMAIN=localhost
@@ -46,7 +47,7 @@ volumes:
 ```
 After executing `docker-compose up`, HedgeDoc should be available at [http://localhost:3000](http://localhost:3000).  
 You can now continue to configure your container with environment variables.
-Check out [the configuration docs](/configuration) for more details.
+Check out [the configuration docs](../configuration.md) for more details.
 
 ## File Permissions
 
@@ -82,7 +83,7 @@ Then run `docker-compose up` to start HedgeDoc again.
 ### Migrating from CodiMD & HackMD
 
 If you currently use CodiMD or HackMD, you should be able to swap the docker image for ours.
-See [the general migration hints](/setup/getting-started/#migrating-from-codimd-hackmd) for compatibility details.
+See [the general migration hints](../setup/getting-started.md#migrating-from-codimd-hackmd) for compatibility details.
 
 
 ## Backup

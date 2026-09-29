@@ -65,6 +65,12 @@ using the button below. This will run the official Docker image from [quay.io](h
 
 [![Run on PikaPods](https://www.pikapods.com/static/run-button.svg)](https://www.pikapods.com/pods?run=hedgedoc)
 
+### Zenith
+
+[Zenith](https://zenith.hosting/) offers one-click managed hosting for open source apps. Deploy a fully managed HedgeDoc instance in minutes using the button below.
+
+[![Deploy with Zenith](https://cdn.zenith.hosting/buttons/deploy-with-zenith.svg)](https://zenith.hosting/host/hedgedoc)
+
 ### SelfPrivacy
 
 HedgeDoc is available as a 1-click install on [SelfPrivacy](https://selfprivacy.org/). SelfPrivacy app allows you to set up self-hosted services on your automatically configured and managed NixOS-based server. Because HedgeDoc is officialy supported by SelfPrivacy, all you need to do is add it from the Services catalog on the Services page.
@@ -79,10 +85,11 @@ The source code of the module can be found [here](https://git.selfprivacy.org/Se
 
 HedgeDoc is available in the Arch Linux _community_ repository.
 
-[Link to the package](https://archlinux.org/packages/community/any/hedgedoc/)
+[Link to the package](https://archlinux.org/packages/extra/any/hedgedoc/)
 
 ### FreeBSD
 
-HedgeDoc is available in the FreeBSD _ports_ repository. After installation, customise your `config.json` file, referring to the official HedgeDoc documentation.
+HedgeDoc was available in the FreeBSD _ports_ repository.
+However, it has been removed due to lack of maintenance.
 
 [Ports Repository](https://freshports.org/www/hedgedoc)

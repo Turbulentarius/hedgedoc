@@ -1,5 +1,91 @@
 # Release Notes
 
+## <i class="fa fa-tag"></i> UNRELEASED
+
+### Bugfixes
+
+- Fixed opening links in new tabs did not work for published and slideshow views. This was forgotten with the last fix in 1.12.0.
+- Tell the user about an impending data loss immediately after the reconnect.
+- Fixed hashtag links opening in new tabs when external link warning is disabled
+- Fixed links with the same origin not opening in new tabs when external link warning is enabled
+
+## <i class="fa fa-tag"></i> 1.12.0 <i class="fa fa-calendar-o"></i> 2026-08-21
+
+### Important changes
+
+⚠️ **HedgeDoc 1.12.0 and onwards will require Node 20.17 or later in order to run.**  
+Since Node 18 security support was stopped over one year ago, we don't maintain backwards-compatability for that anymore.
+
+Some syntax highlighting languages have been removed and/or changed. You can find more information in
+[the highlight.js docs](https://highlightjs.readthedocs.io/en/latest/upgrade-11.html#built-in-set-of-common-languages).
+
+### Enhancements
+
+- Automatically skip the login modal if no form-based login and exactly one external login provider is configured
+
+### Bugfixes
+
+- All links will be opened in new tabs instead of the same tab as the note. This was changed when the external link warning was implemented and now the old behavior is restored
+- Fixed multiple bugs in the realtime connection handling that could lead to data-loss of users with a flaky connection
+
+### Contributors
+
+- [Tony Chau](https://github.com/fo5for)
+- [Lars Kiesow](https://github.com/lkiesow)
+
+## <i class="fa fa-tag"></i> 1.11.1 <i class="fa fa-calendar-o"></i> 2026-07-24
+
+### Security fixes
+
+- [GHSA-93w7-49m2-cqwg](https://github.com/hedgedoc/hedgedoc/security/advisories/GHSA-93w7-49m2-cqwg) reports possible corruption of permission values due to missing validation. This should not impact permission checks, except when the note owner intentionally set their note permission to something invalid.
+
+### Enhancements
+
+- Added external link warning setting (`externalLinkWarning` in config.json or `CMD_EXTERNAL_LINK_WARNING`) to disable the external link warning page entirely
+- Added external link whitelist setting (`externalLinkWhitelist` in config.json or `CMD_EXTERNAL_LINK_WHITELIST`) to skip warning page for certain domains
+- Added support for webp file uploads (for all backends except `imgur`, since that does not support these)
+
+### Bugfixes
+
+- Fixed external link warning for subpath instances
+- Restore native browser zoom-in keyboard shortcuts in the editor
+- Nested list items render properly again in the preview pane for slides
+
+### Refactoring / Clean-up
+
+- Removed the old Temp database object and related API endpoints. This was used by a very old way of migrating the history and is no longer needed.
+- Removed unused `allowOrigin` (environment variable `CMD_ALLOW_ORIGIN`) config option.
+- Removed unnecessary/duplicate entries in the XSS filtering whitelist
+
+### Contributors
+
+- [Shivam Shukla](https://github.com/Shivam-Shukla0)
+- [Tobi](https://github.com/tldev-de)
+
+## <i class="fa fa-tag"></i> 1.11.0 <i class="fa fa-calendar-o"></i> 2026-06-18
+
+### Security fixes
+
+This release contains four security fixes:
+- [CVE-2026-58487](https://github.com/hedgedoc/hedgedoc/security/advisories/GHSA-6c2w-8w96-3pcv) reports a possible HTML injection via the localpart of an email address.
+- [CVE-2026-58486](https://github.com/hedgedoc/hedgedoc/security/advisories/GHSA-qj78-mjch-wwrv) reports a possible Denial-of-Service attack using the YAML frontmatter parsing.
+- [CVE-2026-58489](https://github.com/hedgedoc/hedgedoc/security/advisories/GHSA-8v9p-5j95-826j) reports a possible CSRF attack vector in the GitHub Gist export.
+- [CVE-2026-58488](https://github.com/hedgedoc/hedgedoc/security/advisories/GHSA-2f9f-w8xq-276v) reports a rate-limiting bypass by abusing the CF-Connecting-IP header.
+
+Thanks to [Chandler Johnson](https://github.com/chndlrx), [taylorodell](https://github.com/taylorodell) and [alanturing881](https://github.com/alanturing881) for reporting!
+
+### Important notices
+
+- When using Cloudflare in front of HedgeDoc, you should set `rateLimitUsingCloudflare` in the config.json or `CMD_RATE_LIMIT_USING_CLOUDFLARE` as environment variable to `true`.
+
+### Enhancements
+
+- Added a warning page when clicking external links
+- Improve the config.json.example file, which is used by `bin/setup`
+- Allow configuration of login / signup rate-limits
+- Allow configuration of Cloudflare usage in regards of rate-limits
+- Several improvements in the documentation at <https://docs.hedgedoc.org>
+
 ## <i class="fa fa-tag"></i> 1.10.8 <i class="fa fa-calendar-o"></i> 2026-04-15
 
 ### Bugfixes

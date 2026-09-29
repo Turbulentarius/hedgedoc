@@ -14,6 +14,7 @@ nav:
           - 'Manual Installation': setup/manual-setup.md
       - 'Community Installation Methods': setup/community.md
   - Guides:
+      - 'Production Ready': guides/production-ready.md
       - 'Reverse Proxy': guides/reverse-proxy.md
       - Authentication:
           - LDAP: guides/auth/ldap-ad.md
@@ -30,9 +31,9 @@ nav:
           - Authelia: guides/auth/authelia.md
           - Microsoft Entra ID (Azure AD): guides/auth/entra-id.md
       - Media Backend:
-          - MinIO: guides/minio-image-upload.md
-          - S3: guides/s3-image-upload.md
-          - Google Cloud Storage: guides/s3-google-cloud-storage.md
+          - MinIO: guides/media/minio-image-upload.md
+          - S3: guides/media/s3-image-upload.md
+          - Google Cloud Storage: guides/media/s3-google-cloud-storage.md
       - Migrate from Etherpad: guides/migrate-etherpad.md
       - Migration Troubleshooting: guides/migration-troubleshooting.md
       - Terms of Use Setup: guides/providing-terms.md
